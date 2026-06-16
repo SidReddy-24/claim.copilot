@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/signup", "destination": "/api/index.js" },
+    { "source": "/login", "destination": "/api/index.js" },
+    { "source": "/policy/:path*", "destination": "/api/index.js" },
+    { "source": "/claim/:path*", "destination": "/api/index.js" },
+    { "source": "/api/:path*", "destination": "/api/index.js" },
+    { "source": "/((?!api|signup|login|policy|claim|assets|uploads|favicon.svg).*)", "destination": "/index.html" }
+  ]
+}
