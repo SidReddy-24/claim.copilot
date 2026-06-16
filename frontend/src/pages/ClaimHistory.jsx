@@ -200,12 +200,20 @@ const ClaimHistory = () => {
                               </button>
                             </>
                           ) : (
-                            <button
-                              onClick={() => navigate(`/claim-package?claimId=${claim._id}`)}
-                              className="px-3 py-1 neu-btn rounded text-[10px] font-bold border"
-                            >
-                              View Package
-                            </button>
+                            <>
+                              <button
+                                onClick={() => navigate(`/claim-analysis?claimId=${claim._id}`)}
+                                className="px-2 py-1 neu-btn rounded text-[10px] font-bold"
+                              >
+                                Audit Result
+                              </button>
+                              <button
+                                onClick={() => navigate(`/claim-package?claimId=${claim._id}`)}
+                                className="px-2 py-1 neu-btn-primary rounded text-[10px] font-bold border"
+                              >
+                                View Package
+                              </button>
+                            </>
                           )}
                         </div>
                       </td>

@@ -112,6 +112,10 @@ const ClaimAnalysis = () => {
   };
 
   const handleGeneratePackage = async () => {
+    if (claim?.status === 'Submitted') {
+      navigate(`/claim-package?claimId=${claimId}`);
+      return;
+    }
     setPackaging(true);
     try {
       await api.post('/claim/package', { claimId });
@@ -499,9 +503,13 @@ const ClaimAnalysis = () => {
       {/* Action Block */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#e6eef8] neu-flat p-6 rounded-3xl">
         <div className="space-y-0.5 text-center sm:text-left">
-          <h4 className="font-extrabold text-sm text-slate-850">Generate Submission Package</h4>
+          <h4 className="font-extrabold text-sm text-slate-850">
+            {claim.status === 'Submitted' ? 'Submission Package Ready' : 'Generate Submission Package'}
+          </h4>
           <p className="text-xs text-slate-550 font-bold">
-            Compile checklist, fill details, and compose draft letter for reimbursement filing.
+            {claim.status === 'Submitted' 
+              ? 'View the compiled checklist, filled details, and draft letter for this claim.' 
+              : 'Compile checklist, fill details, and compose draft letter for reimbursement filing.'}
           </p>
         </div>
 
@@ -517,7 +525,7 @@ const ClaimAnalysis = () => {
             </>
           ) : (
             <>
-              <span>Generate Reimbursement Package</span>
+              <span>{claim.status === 'Submitted' ? 'View Submission Package' : 'Generate Reimbursement Package'}</span>
               <ArrowRight size={14} className="ml-1" />
             </>
           )}

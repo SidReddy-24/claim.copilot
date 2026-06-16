@@ -356,12 +356,20 @@ const Dashboard = () => {
                             </button>
                           </>
                         ) : (
-                          <button
-                            onClick={() => navigate(`/claim-package?claimId=${claim._id}`)}
-                            className="w-full py-1.5 neu-btn rounded-lg text-[10px] font-bold text-center"
-                          >
-                            View Package
-                          </button>
+                          <>
+                            <button
+                              onClick={() => navigate(`/claim-analysis?claimId=${claim._id}`)}
+                              className="flex-1 py-1.5 neu-btn rounded-lg text-[10px] font-bold text-center"
+                            >
+                              Audit Result
+                            </button>
+                            <button
+                              onClick={() => navigate(`/claim-package?claimId=${claim._id}`)}
+                              className="flex-1 py-1.5 neu-btn-primary rounded-lg text-[10px] font-bold text-center"
+                            >
+                              View Package
+                            </button>
+                          </>
                         )}
                       </div>
                     </div>
