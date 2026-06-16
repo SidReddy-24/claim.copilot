@@ -11,20 +11,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 const { User, Policy, Claim, Document } = require('../models/db');
 const geminiService = require('../services/geminiService');
 
-// Multer storage setup
-const uploadDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
-});
+// Multer memory storage setup
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Database status checker middleware
@@ -39,19 +27,18 @@ router.use((req, res, next) => {
 });
 
 
-// Helper to extract text from file
-async function extractTextFromFile(filePath, originalName) {
+// Helper to extract text from buffer
+async function extractTextFromBuffer(fileBuffer, originalName) {
   const fileExt = path.extname(originalName).toLowerCase();
   
   if (fileExt === '.pdf') {
-    const fileBuffer = fs.readFileSync(filePath);
     const pdfData = await pdfParse(fileBuffer);
     return pdfData.text;
   } else if (fileExt === '.txt' || fileExt === '.json') {
-    return fs.readFileSync(filePath, 'utf-8');
+    return fileBuffer.toString('utf-8');
   } else {
     // If image or other format, return metadata or simulated extraction
-    return `Uploaded file ${originalName} of size ${fs.statSync(filePath).size} bytes.`;
+    return `Uploaded file ${originalName} of size ${fileBuffer.length} bytes.`;
   }
 }
 
@@ -159,7 +146,7 @@ router.post('/policy/upload', authMiddleware, upload.single('file'), async (req,
     }
 
     // 1. Extract text from uploaded document (supports PDF, txt)
-    const text = await extractTextFromFile(req.file.path, req.file.originalname);
+    const text = await extractTextFromBuffer(req.file.buffer, req.file.originalname);
     
     // 2. Send text to Gemini Service to extract structure
     const extractedData = await geminiService.extractPolicyDetails(text);
@@ -186,7 +173,7 @@ router.post('/policy/upload', authMiddleware, upload.single('file'), async (req,
       userId: req.userId,
       fileName: req.file.originalname,
       fileType: 'Policy',
-      filePath: req.file.path,
+      filePath: "memory://" + req.file.originalname,
       extractedText: text.substring(0, 1000) // Store snippet for reference
     });
     await docLog.save();
@@ -277,7 +264,7 @@ router.post('/claim/upload', authMiddleware, upload.single('file'), async (req, 
     }
 
     // Extract text from document
-    const text = await extractTextFromFile(req.file.path, req.file.originalname);
+    const text = await extractTextFromBuffer(req.file.buffer, req.file.originalname);
 
     // Call Gemini to extract medical specifics (hospital name, dates, total amounts, expenses)
     const extractedData = await geminiService.extractMedicalDocumentDetails(text, fileType);
@@ -327,7 +314,7 @@ router.post('/claim/upload', authMiddleware, upload.single('file'), async (req, 
       claimId: claim._id,
       fileName: req.file.originalname,
       fileType: fileType,
-      filePath: req.file.path,
+      filePath: "memory://" + req.file.originalname,
       extractedText: text.substring(0, 1000)
     });
     await newDoc.save();
