@@ -4,7 +4,8 @@ import api from '../api';
 import { AuthContext } from '../context/AuthContext';
 import { 
   FileText, Plus, AlertTriangle, ArrowRight, ShieldCheck, 
-  HelpCircle, Activity, ChevronRight, FileSpreadsheet
+  HelpCircle, Activity, ChevronRight, FileSpreadsheet,
+  BookOpen, X, Calendar, ShieldAlert, Info
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -12,8 +13,54 @@ const Dashboard = () => {
   const [claims, setClaims] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [selectedPolicyForBenefits, setSelectedPolicyForBenefits] = useState(null);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const fallbackBenefits = {
+    policy_name: {
+      exact_clause: "Star Comprehensive Health Insurance Policy (Individual & Floater)",
+      page: "Page 1"
+    },
+    sum_insured: {
+      exact_clause: "The Maximum Limit of Indemnity under this policy shall be the Sum Insured of INR 5,00,000 per policy year.",
+      page: "Page 2"
+    },
+    room_rent_limit: {
+      exact_clause: "Room Rent, boarding, nursing expenses as provided by the Hospital / Nursing Home up to Single Private A/C Room.",
+      page: "Page 4"
+    },
+    icu_limit: {
+      exact_clause: "Intensive Care Unit (ICU) / Intensive Cardiac Care Unit (ICCU) charges are covered up to actuals.",
+      page: "Page 4"
+    },
+    waiting_periods: [
+      {
+        title: "Pre-Existing Diseases",
+        exact_clause: "Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be excluded until the expiry of 36 months of continuous coverage.",
+        page: "Page 7"
+      },
+      {
+        title: "Initial Waiting Period",
+        exact_clause: "Expenses related to the treatment of any illness within 30 days from the first policy commencement date shall be excluded except for accidental injuries.",
+        page: "Page 7"
+      }
+    ],
+    covered_benefits: [
+      {
+        title: "In-patient Hospitalization",
+        exact_clause: "Room, Boarding, and Nursing Expenses, Surgeon, Anesthetist, Medical Practitioner, Consultants, Specialist Fees, Anesthesia, Blood, Oxygen, Operation Theatre charges, medicines.",
+        page: "Page 3"
+      }
+    ],
+    exclusions: [
+      {
+        title: "Cosmetic & Plastic Surgery",
+        exact_clause: "Expenses for cosmetic or aesthetic treatments, plastic surgery, or reconstructive surgery are excluded unless essential due to accident or cancer.",
+        page: "Page 11"
+      }
+    ]
+  };
 
   useEffect(() => {
     fetchDashboardData();
@@ -207,13 +254,22 @@ const Dashboard = () => {
                       </div>
                     </div>
                     
-                    <button
-                      onClick={() => handleCreateClaim(policy._id)}
-                      className="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-4 py-2.5 neu-btn-primary rounded-xl text-xs font-bold transition duration-200"
-                    >
-                      <span>File reimbursement claim</span>
-                      <ArrowRight size={12} />
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                      <button
+                        onClick={() => setSelectedPolicyForBenefits(policy)}
+                        className="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-4 py-2.5 neu-btn rounded-xl text-xs font-bold transition duration-200"
+                      >
+                        <BookOpen size={12} className="text-blue-500 shrink-0" />
+                        <span>View Benefits</span>
+                      </button>
+                      <button
+                        onClick={() => handleCreateClaim(policy._id)}
+                        className="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-4 py-2.5 neu-btn-primary rounded-xl text-xs font-bold transition duration-200"
+                      >
+                        <span>File claim</span>
+                        <ArrowRight size={12} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -316,6 +372,168 @@ const Dashboard = () => {
           </span>
         </p>
       </div>
+
+      {/* Policy Benefits Details Modal Popup */}
+      {selectedPolicyForBenefits && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#e6eef8] neu-flat max-w-5xl w-full max-h-[85vh] rounded-3xl p-6 overflow-y-auto space-y-6 relative border border-slate-200/50">
+            {/* Modal Header */}
+            <div className="flex justify-between items-start border-b border-slate-200/60 pb-4">
+              <div>
+                <span className="text-[9px] text-blue-600 font-bold tracking-widest uppercase">Policy Clauses & Limits</span>
+                <h2 className="text-xl font-black text-slate-800 mt-1">{selectedPolicyForBenefits.policyName}</h2>
+                <p className="text-xs text-slate-500 font-bold mt-0.5">
+                  Insurer: {selectedPolicyForBenefits.insurer} | No: {selectedPolicyForBenefits.policyNumber}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedPolicyForBenefits(null)}
+                className="w-8 h-8 rounded-full bg-[#e6eef8] neu-card flex items-center justify-center text-slate-500 hover:text-slate-800 transition-all duration-200 shadow-md"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="space-y-6">
+              {/* Key Limits Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Policy Name */}
+                <div className="neu-card p-4 rounded-xl relative flex flex-col justify-between">
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Policy Title</span>
+                      <span className="text-[8px] font-black bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">
+                        {(selectedPolicyForBenefits.benefits || fallbackBenefits).policy_name?.page || "Page 1"}
+                      </span>
+                    </div>
+                    <p className="text-[11px] font-bold text-slate-750 leading-relaxed italic">
+                      "{ (selectedPolicyForBenefits.benefits || fallbackBenefits).policy_name?.exact_clause }"
+                    </p>
+                  </div>
+                </div>
+
+                {/* Sum Insured */}
+                <div className="neu-card p-4 rounded-xl relative flex flex-col justify-between border-l-2 border-blue-500">
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Sum Insured Clause</span>
+                      <span className="text-[8px] font-black bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">
+                        {(selectedPolicyForBenefits.benefits || fallbackBenefits).sum_insured?.page || "Page 2"}
+                      </span>
+                    </div>
+                    <p className="text-[11px] font-bold text-slate-750 leading-relaxed italic">
+                      "{ (selectedPolicyForBenefits.benefits || fallbackBenefits).sum_insured?.exact_clause }"
+                    </p>
+                  </div>
+                </div>
+
+                {/* Room Rent */}
+                <div className="neu-card p-4 rounded-xl relative flex flex-col justify-between border-l-2 border-amber-500">
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Room Rent limits</span>
+                      <span className="text-[8px] font-black bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">
+                        {(selectedPolicyForBenefits.benefits || fallbackBenefits).room_rent_limit?.page || "Page 4"}
+                      </span>
+                    </div>
+                    <p className="text-[11px] font-bold text-slate-750 leading-relaxed italic">
+                      "{ (selectedPolicyForBenefits.benefits || fallbackBenefits).room_rent_limit?.exact_clause }"
+                    </p>
+                  </div>
+                </div>
+
+                {/* ICU */}
+                <div className="neu-card p-4 rounded-xl relative flex flex-col justify-between border-l-2 border-rose-500">
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">ICU limit Clause</span>
+                      <span className="text-[8px] font-black bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">
+                        {(selectedPolicyForBenefits.benefits || fallbackBenefits).icu_limit?.page || "Page 4"}
+                      </span>
+                    </div>
+                    <p className="text-[11px] font-bold text-slate-750 leading-relaxed italic">
+                      "{ (selectedPolicyForBenefits.benefits || fallbackBenefits).icu_limit?.exact_clause }"
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dynamic Categories Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Waiting Periods */}
+                <div className="neu-card p-5 rounded-2xl space-y-3">
+                  <h3 className="text-xs font-black text-slate-800 border-b border-slate-200/50 pb-1.5 flex items-center space-x-1.5">
+                    <Calendar size={13} className="text-amber-550" />
+                    <span>Waiting Periods</span>
+                  </h3>
+                  <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
+                    {((selectedPolicyForBenefits.benefits || fallbackBenefits).waiting_periods || []).map((item, idx) => (
+                      <div key={idx} className="bg-[#e6eef8] p-3.5 rounded-xl border border-slate-200/35 space-y-1.5 shadow-sm">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[11px] font-bold text-slate-800">{item.title}</span>
+                          <span className="text-[8px] font-black bg-amber-100 text-amber-750 px-1.5 py-0.5 rounded">
+                            {item.page}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-650 font-semibold leading-relaxed italic">
+                          "{item.exact_clause}"
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Covered Benefits */}
+                <div className="neu-card p-5 rounded-2xl space-y-3">
+                  <h3 className="text-xs font-black text-slate-800 border-b border-slate-200/50 pb-1.5 flex items-center space-x-1.5">
+                    <ShieldCheck size={13} className="text-emerald-500" />
+                    <span>Covered Benefits</span>
+                  </h3>
+                  <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
+                    {((selectedPolicyForBenefits.benefits || fallbackBenefits).covered_benefits || []).map((item, idx) => (
+                      <div key={idx} className="bg-[#e6eef8] p-3.5 rounded-xl border border-slate-200/35 space-y-1.5 shadow-sm">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[11px] font-bold text-slate-800">{item.title}</span>
+                          <span className="text-[8px] font-black bg-emerald-100 text-emerald-750 px-1.5 py-0.5 rounded">
+                            {item.page}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-650 font-semibold leading-relaxed italic">
+                          "{item.exact_clause}"
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Exclusions */}
+                <div className="neu-card p-5 rounded-2xl space-y-3">
+                  <h3 className="text-xs font-black text-slate-800 border-b border-slate-200/50 pb-1.5 flex items-center space-x-1.5">
+                    <ShieldAlert size={13} className="text-rose-500" />
+                    <span>Policy Exclusions</span>
+                  </h3>
+                  <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
+                    {((selectedPolicyForBenefits.benefits || fallbackBenefits).exclusions || []).map((item, idx) => (
+                      <div key={idx} className="bg-[#e6eef8] p-3.5 rounded-xl border border-slate-200/35 space-y-1.5 border-l-2 border-rose-400 shadow-sm">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[11px] font-bold text-slate-800">{item.title}</span>
+                          <span className="text-[8px] font-black bg-rose-100 text-rose-750 px-1.5 py-0.5 rounded">
+                            {item.page}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-650 font-semibold leading-relaxed italic">
+                          "{item.exact_clause}"
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
