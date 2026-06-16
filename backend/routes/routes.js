@@ -16,12 +16,21 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Database status checker middleware
-router.use((req, res, next) => {
+router.use(async (req, res, next) => {
   const mongoose = require('mongoose');
+  const { connectDB } = require('../models/db');
+  const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/claim-assistant';
+
   if (mongoose.connection.readyState !== 1) {
-    return res.status(503).json({
-      message: 'Database connection is offline. Please make sure MongoDB is running locally (e.g. running "mongod") or configure MONGO_URI in your backend/.env configuration file.'
-    });
+    try {
+      await connectDB(MONGO_URI);
+    } catch (err) {
+      console.error('Database connection failed in middleware:', err.message);
+      return res.status(503).json({
+        message: `Database connection is offline. Connection error: ${err.message}. Please configure MONGO_URI in your environment variables.`,
+        error: err.message
+      });
+    }
   }
   next();
 });
