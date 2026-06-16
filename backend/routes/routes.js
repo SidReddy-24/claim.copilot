@@ -343,6 +343,38 @@ router.post('/claim/upload', authMiddleware, upload.single('file'), async (req, 
   }
 });
 
+// GET /claim/result
+// Expects: claimId as a query parameter (GET /claim/result?claimId=xxxx)
+router.get('/claim/result', authMiddleware, async (req, res) => {
+  try {
+    const { claimId } = req.query;
+    if (!claimId) {
+      return res.status(400).json({ message: 'Claim ID is required in query parameters' });
+    }
+
+    const claim = await Claim.findOne({ _id: claimId, userId: req.userId });
+    if (!claim) {
+      return res.status(404).json({ message: 'Claim not found' });
+    }
+
+    res.json({
+      claimId: claim._id,
+      hospitalName: claim.hospitalName,
+      admissionDate: claim.admissionDate,
+      dischargeDate: claim.dischargeDate,
+      totalClaimedAmount: claim.totalClaimedAmount,
+      estimatedReimbursement: claim.estimatedReimbursement,
+      confidenceScore: claim.confidenceScore,
+      expenseBreakdown: claim.expenseBreakdown,
+      missingDocuments: claim.missingDocuments,
+      status: claim.status
+    });
+  } catch (error) {
+    console.error('Get claim result error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 // GET /claim/:id
 router.get('/claim/:id', authMiddleware, async (req, res) => {
   try {
@@ -353,7 +385,7 @@ router.get('/claim/:id', authMiddleware, async (req, res) => {
     res.json(claim);
   } catch (error) {
     console.error('Get claim error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -444,37 +476,7 @@ router.post('/claim/analyze', authMiddleware, async (req, res) => {
   }
 });
 
-// GET /claim/result
-// Expects: claimId as a query parameter (GET /claim/result?claimId=xxxx)
-router.get('/claim/result', authMiddleware, async (req, res) => {
-  try {
-    const { claimId } = req.query;
-    if (!claimId) {
-      return res.status(400).json({ message: 'Claim ID is required in query parameters' });
-    }
 
-    const claim = await Claim.findOne({ _id: claimId, userId: req.userId });
-    if (!claim) {
-      return res.status(404).json({ message: 'Claim not found' });
-    }
-
-    res.json({
-      claimId: claim._id,
-      hospitalName: claim.hospitalName,
-      admissionDate: claim.admissionDate,
-      dischargeDate: claim.dischargeDate,
-      totalClaimedAmount: claim.totalClaimedAmount,
-      estimatedReimbursement: claim.estimatedReimbursement,
-      confidenceScore: claim.confidenceScore,
-      expenseBreakdown: claim.expenseBreakdown,
-      missingDocuments: claim.missingDocuments,
-      status: claim.status
-    });
-  } catch (error) {
-    console.error('Get claim result error:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
 
 // -------------------------------------------------------------
 // CLAIM PACKAGE GENERATION
