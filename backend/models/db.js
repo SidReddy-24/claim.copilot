@@ -54,6 +54,7 @@ const PolicySchema = new mongoose.Schema({
   coveredBenefits: [{ type: String }],
   exclusions: [{ type: String }],
   requiredClaimDocuments: [{ type: String }],
+  benefits: { type: mongoose.Schema.Types.Mixed },
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -77,11 +77,50 @@ async function extractPolicyDetails(policyText) {
     },
     "coveredBenefits": ["string", "string", ...],
     "exclusions": ["string", "string", ...],
-    "requiredClaimDocuments": ["string", "string", ...]
+    "requiredClaimDocuments": ["string", "string", ...],
+    "benefits": {
+      "policy_name": {
+        "exact_clause": "string",
+        "page": "string"
+      },
+      "sum_insured": {
+        "exact_clause": "string",
+        "page": "string"
+      },
+      "room_rent_limit": {
+        "exact_clause": "string",
+        "page": "string"
+      },
+      "icu_limit": {
+        "exact_clause": "string",
+        "page": "string"
+      },
+      "waiting_periods": [
+        {
+          "title": "string",
+          "exact_clause": "string",
+          "page": "string"
+        }
+      ],
+      "covered_benefits": [
+        {
+          "title": "string",
+          "exact_clause": "string",
+          "page": "string"
+        }
+      ],
+      "exclusions": [
+        {
+          "title": "string",
+          "exact_clause": "string",
+          "page": "string"
+        }
+      ]
+    }
   }
   
   Do NOT include any other text outside the JSON object.
-  If a detail cannot be found in the text, provide a sensible default or "Not Specified".
+  If a detail cannot be found in the text, provide a sensible default or "Not Specified". Ensure exact_clause quotes the actual sentence(s) from the text, and page lists the page number (e.g., "Page 3" or "3") where it was found.
   
   Here is the policy text:
   ---
@@ -284,7 +323,76 @@ function getMockPolicyExtraction() {
       "Pharmacy bills and corresponding doctor prescriptions",
       "Diagnostic test bills and original lab reports",
       "Cancelled cheque of the primary policyholder for bank details"
-    ]
+    ],
+    benefits: {
+      policy_name: {
+        exact_clause: "This policy is named Care Supreme Health Plan issued by Care Health Insurance Ltd.",
+        page: "Page 1"
+      },
+      sum_insured: {
+        exact_clause: "The Maximum Limit of Indemnity under this policy shall be INR 7,00,000 per policy year.",
+        page: "Page 2"
+      },
+      room_rent_limit: {
+        exact_clause: "The Insured Person is eligible for a Single Private A/C Room. No proportionate sub-limits apply.",
+        page: "Page 4"
+      },
+      icu_limit: {
+        exact_clause: "Intensive Care Unit (ICU) charges are covered up to actual expenses, with no sub-limit caps.",
+        page: "Page 4"
+      },
+      waiting_periods: [
+        {
+          title: "Pre-existing Diseases",
+          exact_clause: "Pre-Existing Diseases (PED) will be covered after a continuous waiting period of 36 months.",
+          page: "Page 6"
+        },
+        {
+          title: "Initial Waiting Period",
+          exact_clause: "A waiting period of 30 days from policy start date applies to all claims, except those arising from accidental injuries.",
+          page: "Page 6"
+        },
+        {
+          title: "Specific Illnesses",
+          exact_clause: "A 24-month waiting period applies to listed procedures, including Cataract, Hernia, Joint Replacements, and Sinusitis.",
+          page: "Page 7"
+        }
+      ],
+      covered_benefits: [
+        {
+          title: "In-patient Hospitalization",
+          exact_clause: "In-patient Medical Expenses incurred for hospitalization of more than 24 hours are covered.",
+          page: "Page 3"
+        },
+        {
+          title: "Day Care Treatment",
+          exact_clause: "Medical Expenses incurred for Day Care procedures that require less than 24 hours of hospitalization are covered.",
+          page: "Page 3"
+        },
+        {
+          title: "Pre & Post Hospitalization",
+          exact_clause: "Pre-hospitalization expenses up to 60 days and Post-hospitalization expenses up to 90 days are covered.",
+          page: "Page 5"
+        }
+      ],
+      exclusions: [
+        {
+          title: "Cosmetic Procedures",
+          exact_clause: "Expenses for cosmetic or plastic surgery are excluded unless required due to an accident.",
+          page: "Page 9"
+        },
+        {
+          title: "Addiction Treatment",
+          exact_clause: "Treatment for alcoholism, drug abuse, or drug addiction is excluded.",
+          page: "Page 10"
+        },
+        {
+          title: "Non-medical Items",
+          exact_clause: "Expenses for personal comfort or non-medical consumables are excluded.",
+          page: "Page 11"
+        }
+      ]
+    }
   };
 }
 

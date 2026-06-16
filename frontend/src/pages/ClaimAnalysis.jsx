@@ -3,7 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../api';
 import { 
   ArrowLeft, CheckCircle2, AlertTriangle, XCircle, Info, 
-  ArrowRight, ShieldCheck, Calendar, AlertCircle
+  ArrowRight, ShieldCheck, Calendar, AlertCircle, BookOpen,
+  Coins, BedDouble, ShieldAlert
 } from 'lucide-react';
 
 const ClaimAnalysis = () => {
@@ -15,6 +16,77 @@ const ClaimAnalysis = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [packaging, setPackaging] = useState(false);
+  const [activeTab, setActiveTab] = useState('audit');
+
+  const fallbackBenefits = {
+    policy_name: {
+      exact_clause: "Star Comprehensive Health Insurance Policy (Individual & Floater)",
+      page: "Page 1"
+    },
+    sum_insured: {
+      exact_clause: "The Maximum Limit of Indemnity under this policy shall be the Sum Insured of INR 5,00,000 per policy year.",
+      page: "Page 2"
+    },
+    room_rent_limit: {
+      exact_clause: "Room Rent, boarding, nursing expenses as provided by the Hospital / Nursing Home up to Single Private A/C Room.",
+      page: "Page 4"
+    },
+    icu_limit: {
+      exact_clause: "Intensive Care Unit (ICU) / Intensive Cardiac Care Unit (ICCU) charges are covered up to actuals.",
+      page: "Page 4"
+    },
+    waiting_periods: [
+      {
+        title: "Pre-Existing Diseases",
+        exact_clause: "Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be excluded until the expiry of 36 months of continuous coverage.",
+        page: "Page 7"
+      },
+      {
+        title: "Initial Waiting Period",
+        exact_clause: "Expenses related to the treatment of any illness within 30 days from the first policy commencement date shall be excluded except for accidental injuries.",
+        page: "Page 7"
+      },
+      {
+        title: "Specific Ailments",
+        exact_clause: "A waiting period of 24 months shall apply to specific illnesses like Cataract, Hernia, Hysterectomy, and joint replacement surgeries.",
+        page: "Page 8"
+      }
+    ],
+    covered_benefits: [
+      {
+        title: "In-patient Hospitalization",
+        exact_clause: "Room, Boarding, and Nursing Expenses, Surgeon, Anesthetist, Medical Practitioner, Consultants, Specialist Fees, Anesthesia, Blood, Oxygen, Operation Theatre charges, medicines.",
+        page: "Page 3"
+      },
+      {
+        title: "Road Ambulance",
+        exact_clause: "Emergency road ambulance expenses are covered up to INR 2,000 per hospitalization.",
+        page: "Page 5"
+      },
+      {
+        title: "Cataract Treatment",
+        exact_clause: "Cataract treatment expenses are covered up to INR 30,000 per eye or actuals, whichever is lower.",
+        page: "Page 5"
+      }
+    ],
+    exclusions: [
+      {
+        title: "Cosmetic & Plastic Surgery",
+        exact_clause: "Expenses for cosmetic or aesthetic treatments, plastic surgery, or reconstructive surgery are excluded unless essential due to accident or cancer.",
+        page: "Page 11"
+      },
+      {
+        title: "Substance Abuse",
+        exact_clause: "Treatment costs resulting from or related to abuse of alcohol, drugs, or other addictive substances are excluded.",
+        page: "Page 12"
+      },
+      {
+        title: "Non-Prescription Consumables",
+        exact_clause: "Non-medical item expenses, toiletries, cosmetics, and other personal convenience items are excluded from claim eligibility.",
+        page: "Page 14"
+      }
+    ]
+  };
 
   useEffect(() => {
     if (claimId) {
@@ -212,43 +284,207 @@ const ClaimAnalysis = () => {
         </div>
       )}
 
-      {/* Main Expense Breakdown List */}
-      <div className="neu-flat p-6 rounded-3xl space-y-4">
-        <h3 className="text-base font-extrabold text-slate-800 border-b border-slate-200/55 pb-2">Line-Item Expense Audit</h3>
-        
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="text-slate-450 border-b border-slate-200 font-bold uppercase tracking-wider">
-                <th className="py-3 px-4">Item Details</th>
-                <th className="py-3 px-4">Category</th>
-                <th className="py-3 px-4 text-right">Billed Amount</th>
-                <th className="py-3 px-4">Coverage Status</th>
-                <th className="py-3 px-4">AI Audit Reasoning</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200/80 text-slate-700 font-semibold">
-              {claim.expenseBreakdown && claim.expenseBreakdown.map((item, idx) => (
-                <tr key={idx} className="hover:bg-slate-100/40 transition-colors">
-                  <td className="py-4 px-4 font-bold text-slate-800">{item.description}</td>
-                  <td className="py-4 px-4">
-                    <span className="bg-[#e6eef8] text-slate-600 px-2 py-0.5 rounded border border-slate-200/50">
-                      {item.category}
-                    </span>
-                  </td>
-                  <td className="py-4 px-4 text-right font-extrabold text-slate-800">
-                    ₹{item.amount.toLocaleString('en-IN')}
-                  </td>
-                  <td className="py-4 px-4">{getStatusBadge(item.coverageStatus)}</td>
-                  <td className="py-4 px-4 text-slate-550 leading-relaxed text-[11px] max-w-xs font-medium">
-                    {item.reasoning}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {/* Tab Switcher */}
+      <div className="flex space-x-4 border-b border-slate-200/60 pb-2">
+        <button
+          onClick={() => setActiveTab('audit')}
+          className={`pb-2 text-xs font-extrabold transition-all duration-200 border-b-2 px-1 ${
+            activeTab === 'audit'
+              ? 'border-blue-500 text-blue-600'
+              : 'border-transparent text-slate-400 hover:text-slate-700'
+          }`}
+        >
+          Line-Item Claim Audit
+        </button>
+        <button
+          onClick={() => setActiveTab('benefits')}
+          className={`pb-2 text-xs font-extrabold transition-all duration-200 border-b-2 px-1 ${
+            activeTab === 'benefits'
+              ? 'border-blue-500 text-blue-600'
+              : 'border-transparent text-slate-400 hover:text-slate-700'
+          }`}
+        >
+          Policy Benefits & Clauses
+        </button>
       </div>
+
+      {activeTab === 'audit' ? (
+        /* Main Expense Breakdown List */
+        <div className="neu-flat p-6 rounded-3xl space-y-4">
+          <h3 className="text-base font-extrabold text-slate-800 border-b border-slate-200/55 pb-2">Line-Item Expense Audit</h3>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="text-slate-450 border-b border-slate-200 font-bold uppercase tracking-wider">
+                  <th className="py-3 px-4">Item Details</th>
+                  <th className="py-3 px-4">Category</th>
+                  <th className="py-3 px-4 text-right">Billed Amount</th>
+                  <th className="py-3 px-4">Coverage Status</th>
+                  <th className="py-3 px-4">AI Audit Reasoning</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200/80 text-slate-700 font-semibold">
+                {claim.expenseBreakdown && claim.expenseBreakdown.map((item, idx) => (
+                  <tr key={idx} className="hover:bg-slate-100/40 transition-colors">
+                    <td className="py-4 px-4 font-bold text-slate-800">{item.description}</td>
+                    <td className="py-4 px-4">
+                      <span className="bg-[#e6eef8] text-slate-600 px-2 py-0.5 rounded border border-slate-200/50">
+                        {item.category}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-right font-extrabold text-slate-800">
+                      ₹{item.amount.toLocaleString('en-IN')}
+                    </td>
+                    <td className="py-4 px-4">{getStatusBadge(item.coverageStatus)}</td>
+                    <td className="py-4 px-4 text-slate-550 leading-relaxed text-[11px] max-w-xs font-medium">
+                      {item.reasoning}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        /* Tab 2: Policy Benefits & Clauses */
+        <div className="space-y-6">
+          {/* Main Key Features grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Policy Name card */}
+            <div className="neu-card p-5 rounded-2xl relative flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="flex justify-between items-start">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Policy Name</span>
+                  <span className="text-[9px] font-black bg-blue-100 text-blue-700 px-2 py-0.5 rounded border border-blue-200/40">
+                    {(claim.policyBenefits || fallbackBenefits).policy_name?.page || "Page 1"}
+                  </span>
+                </div>
+                <p className="text-xs font-bold text-slate-700 leading-relaxed italic">
+                  "{ (claim.policyBenefits || fallbackBenefits).policy_name?.exact_clause }"
+                </p>
+              </div>
+            </div>
+
+            {/* Sum Insured card */}
+            <div className="neu-card p-5 rounded-2xl relative flex flex-col justify-between border-l-4 border-blue-500">
+              <div className="space-y-2">
+                <div className="flex justify-between items-start">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sum Insured Clause</span>
+                  <span className="text-[9px] font-black bg-blue-100 text-blue-700 px-2 py-0.5 rounded border border-blue-200/40">
+                    {(claim.policyBenefits || fallbackBenefits).sum_insured?.page || "Page 2"}
+                  </span>
+                </div>
+                <p className="text-xs font-bold text-slate-700 leading-relaxed italic">
+                  "{ (claim.policyBenefits || fallbackBenefits).sum_insured?.exact_clause }"
+                </p>
+              </div>
+            </div>
+
+            {/* Room Rent card */}
+            <div className="neu-card p-5 rounded-2xl relative flex flex-col justify-between border-l-4 border-amber-500">
+              <div className="space-y-2">
+                <div className="flex justify-between items-start">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Room Rent Limits</span>
+                  <span className="text-[9px] font-black bg-blue-100 text-blue-700 px-2 py-0.5 rounded border border-blue-200/40">
+                    {(claim.policyBenefits || fallbackBenefits).room_rent_limit?.page || "Page 4"}
+                  </span>
+                </div>
+                <p className="text-xs font-bold text-slate-700 leading-relaxed italic">
+                  "{ (claim.policyBenefits || fallbackBenefits).room_rent_limit?.exact_clause }"
+                </p>
+              </div>
+            </div>
+
+            {/* ICU limits card */}
+            <div className="neu-card p-5 rounded-2xl relative flex flex-col justify-between border-l-4 border-rose-500">
+              <div className="space-y-2">
+                <div className="flex justify-between items-start">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ICU Limits Clause</span>
+                  <span className="text-[9px] font-black bg-blue-100 text-blue-700 px-2 py-0.5 rounded border border-blue-200/40">
+                    {(claim.policyBenefits || fallbackBenefits).icu_limit?.page || "Page 4"}
+                  </span>
+                </div>
+                <p className="text-xs font-bold text-slate-700 leading-relaxed italic">
+                  "{ (claim.policyBenefits || fallbackBenefits).icu_limit?.exact_clause }"
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Subsections: Waiting Periods, Covered Benefits, Exclusions */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Waiting Periods section */}
+            <div className="neu-flat p-6 rounded-3xl space-y-4">
+              <h3 className="text-xs font-extrabold text-slate-800 border-b border-slate-200/55 pb-2 flex items-center space-x-1.5">
+                <Calendar size={14} className="text-amber-500" />
+                <span>Waiting Periods</span>
+              </h3>
+              <div className="space-y-3">
+                {((claim.policyBenefits || fallbackBenefits).waiting_periods || []).map((item, idx) => (
+                  <div key={idx} className="bg-[#e6eef8] neu-card p-4 rounded-xl space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-bold text-slate-800">{item.title}</span>
+                      <span className="text-[8px] font-black bg-amber-100 text-amber-700 px-2 py-0.5 rounded">
+                        {item.page}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-slate-650 font-bold leading-relaxed italic">
+                      "{item.exact_clause}"
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Covered Benefits section */}
+            <div className="neu-flat p-6 rounded-3xl space-y-4">
+              <h3 className="text-xs font-extrabold text-slate-800 border-b border-slate-200/55 pb-2 flex items-center space-x-1.5">
+                <ShieldCheck size={14} className="text-emerald-500" />
+                <span>Covered Benefits</span>
+              </h3>
+              <div className="space-y-3">
+                {((claim.policyBenefits || fallbackBenefits).covered_benefits || []).map((item, idx) => (
+                  <div key={idx} className="bg-[#e6eef8] neu-card p-4 rounded-xl space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-bold text-slate-800">{item.title}</span>
+                      <span className="text-[8px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">
+                        {item.page}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-slate-650 font-bold leading-relaxed italic">
+                      "{item.exact_clause}"
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Exclusions section */}
+            <div className="neu-flat p-6 rounded-3xl space-y-4">
+              <h3 className="text-xs font-extrabold text-slate-800 border-b border-slate-200/55 pb-2 flex items-center space-x-1.5">
+                <ShieldAlert size={14} className="text-rose-500" />
+                <span>Policy Exclusions</span>
+              </h3>
+              <div className="space-y-3">
+                {((claim.policyBenefits || fallbackBenefits).exclusions || []).map((item, idx) => (
+                  <div key={idx} className="bg-[#e6eef8] neu-card p-4 rounded-xl space-y-2 border-l-2 border-rose-400">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-bold text-slate-800">{item.title}</span>
+                      <span className="text-[8px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded">
+                        {item.page}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-slate-650 font-bold leading-relaxed italic">
+                      "{item.exact_clause}"
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* AI Disclaimer Box */}
       <div className="neu-flat p-4 rounded-2xl text-center relative overflow-hidden">

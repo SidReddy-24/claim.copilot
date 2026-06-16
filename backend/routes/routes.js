@@ -172,7 +172,8 @@ router.post('/policy/upload', authMiddleware, upload.single('file'), async (req,
       waitingPeriods: extractedData.waitingPeriods || {},
       coveredBenefits: extractedData.coveredBenefits || [],
       exclusions: extractedData.exclusions || [],
-      requiredClaimDocuments: extractedData.requiredClaimDocuments || []
+      requiredClaimDocuments: extractedData.requiredClaimDocuments || [],
+      benefits: extractedData.benefits || null
     });
 
     await policy.save();
@@ -357,6 +358,9 @@ router.get('/claim/result', authMiddleware, async (req, res) => {
       return res.status(404).json({ message: 'Claim not found' });
     }
 
+    const policy = await Policy.findById(claim.policyId);
+    const policyBenefits = policy ? policy.benefits : null;
+
     res.json({
       claimId: claim._id,
       hospitalName: claim.hospitalName,
@@ -367,7 +371,8 @@ router.get('/claim/result', authMiddleware, async (req, res) => {
       confidenceScore: claim.confidenceScore,
       expenseBreakdown: claim.expenseBreakdown,
       missingDocuments: claim.missingDocuments,
-      status: claim.status
+      status: claim.status,
+      policyBenefits: policyBenefits
     });
   } catch (error) {
     console.error('Get claim result error:', error);
