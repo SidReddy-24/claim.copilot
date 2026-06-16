@@ -19,7 +19,7 @@ const upload = multer({ storage });
 router.use(async (req, res, next) => {
   const mongoose = require('mongoose');
   const { connectDB } = require('../models/db');
-  const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/claim-assistant';
+  const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/claim-assistant';
 
   if (mongoose.connection.readyState !== 1) {
     try {
@@ -98,7 +98,7 @@ router.post('/signup', async (req, res) => {
     });
   } catch (error) {
     console.error('Signup error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error: error.message, stack: error.stack });
   }
 });
 
@@ -139,7 +139,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error: error.message, stack: error.stack });
   }
 });
 
