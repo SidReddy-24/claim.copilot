@@ -91,7 +91,8 @@ const UploadClaim = () => {
       await loadDetails();
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || 'Failed to upload document. Please verify parameters.');
+      const backendErr = err.response?.data?.error || err.response?.data?.message || err.message;
+      setError(backendErr);
     } finally {
       setUploading(false);
     }
@@ -111,7 +112,8 @@ const UploadClaim = () => {
       navigate(`/claim-analysis?claimId=${claimId}`);
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || 'AI claims audit failed. Verify backend Gemini credentials.');
+      const backendErr = err.response?.data?.error || err.response?.data?.message || err.message;
+      setError(backendErr);
       setAnalyzing(false);
     }
   };
