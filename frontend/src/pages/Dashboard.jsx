@@ -85,6 +85,17 @@ const Dashboard = () => {
   };
 
   const handleCreateClaim = async (policyId) => {
+    // Check if a claim already exists for this policy
+    const existingClaim = claims.find(c => c.policyId === policyId);
+    if (existingClaim) {
+      if (existingClaim.status === 'Draft') {
+        navigate(`/upload-claim?claimId=${existingClaim._id}&policyId=${policyId}`);
+      } else {
+        navigate(`/claim-package?claimId=${existingClaim._id}`);
+      }
+      return;
+    }
+
     try {
       const res = await api.post('/claim/create', { policyId });
       const newClaim = res.data;

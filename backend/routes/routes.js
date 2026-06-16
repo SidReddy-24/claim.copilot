@@ -238,6 +238,12 @@ router.post('/claim/create', authMiddleware, async (req, res) => {
       return res.status(404).json({ message: 'Policy not found' });
     }
 
+    // Check if a claim already exists for this policy and user
+    const existingClaim = await Claim.findOne({ policyId: policy._id, userId: req.userId });
+    if (existingClaim) {
+      return res.status(200).json(existingClaim);
+    }
+
     // Create a new claim draft
     const claim = new Claim({
       userId: req.userId,
@@ -397,7 +403,47 @@ router.get('/claim/:id', authMiddleware, async (req, res) => {
 // Helper GET /claims to fetch all claims for the dashboard
 router.get('/claims', authMiddleware, async (req, res) => {
   try {
-    const claims = await Claim.find({ userId: req.userId }).sort({ createdAt: -1 });
+    let claims = await Claim.find({ userId: req.userId }).sort({ createdAt: -1 });
+
+    // Deduplicate empty draft claims for the same policy on the fly to clean up database
+    const policyClaimsMap = {};
+    claims.forEach(c => {
+      const pid = c.policyId.toString();
+      if (!policyClaimsMap[pid]) {
+        policyClaimsMap[pid] = [];
+      }
+      policyClaimsMap[pid].push(c);
+    });
+
+    const claimsToDeleteIds = [];
+    for (const pid in policyClaimsMap) {
+      const pClaims = policyClaimsMap[pid];
+      if (pClaims.length > 1) {
+        // Sort: Submitted/analyzed ones first, then drafts with actual content, newest drafts next
+        pClaims.sort((a, b) => {
+          if (a.status === 'Submitted' && b.status !== 'Submitted') return -1;
+          if (b.status === 'Submitted' && a.status !== 'Submitted') return 1;
+          const aLen = a.expenseBreakdown?.length || 0;
+          const bLen = b.expenseBreakdown?.length || 0;
+          if (aLen !== bLen) return bLen - aLen;
+          return b.createdAt - a.createdAt;
+        });
+
+        // Keep the best/newest one, mark other empty draft ones for deletion
+        for (let i = 1; i < pClaims.length; i++) {
+          const c = pClaims[i];
+          if (c.status === 'Draft' && (!c.expenseBreakdown || c.expenseBreakdown.length === 0)) {
+            claimsToDeleteIds.push(c._id);
+          }
+        }
+      }
+    }
+
+    if (claimsToDeleteIds.length > 0) {
+      await Claim.deleteMany({ _id: { $in: claimsToDeleteIds } });
+      claims = await Claim.find({ userId: req.userId }).sort({ createdAt: -1 });
+    }
+
     res.json(claims);
   } catch (error) {
     console.error('Get claims error:', error);
