@@ -1,11 +1,19 @@
 {
   "version": 2,
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
   "rewrites": [
-    { "source": "/signup", "destination": "/api/index.js" },
-    { "source": "/login", "destination": "/api/index.js" },
-    { "source": "/policy/:path*", "destination": "/api/index.js" },
-    { "source": "/claim/:path*", "destination": "/api/index.js" },
     { "source": "/api/:path*", "destination": "/api/index.js" },
-    { "source": "/((?!api|signup|login|policy|claim|assets|uploads|favicon.svg).*)", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE,OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
+      ]
+    }
   ]
 }
