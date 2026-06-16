@@ -32,7 +32,8 @@ const ClaimAnalysis = () => {
       setClaim(res.data);
     } catch (err) {
       console.error(err);
-      setError('Could not load claims audit details. Make sure the database schema matches.');
+      const backendErr = err.response?.data?.error || err.response?.data?.message || err.message;
+      setError(backendErr);
     } finally {
       setLoading(false);
     }
