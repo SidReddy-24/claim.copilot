@@ -1,18 +1,31 @@
 const mongoose = require('mongoose');
 
-let isConnected = false;
+let cached = global.mongoose;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
-// Connect to MongoDB function (serverless-friendly)
 const connectDB = async (mongoUri) => {
-  if (isConnected) {
-    console.log('Mongoose is already connected. Reusing connection.');
-    return;
+  const uri = mongoUri || 'mongodb://127.0.0.1:27017/claim-assistant';
+  if (cached.conn) {
+    return cached.conn;
   }
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(uri, {
+      maxPoolSize: 5,
+      serverSelectionTimeoutMS: 5000,
+      bufferCommands: false,
+    }).then((m) => {
+      cached.conn = m;
+      return m;
+    });
+  }
+
   try {
-    const conn = await mongoose.connect(mongoUri || 'mongodb://127.0.0.1:27017/claim-assistant');
-    isConnected = !!conn.connections[0].readyState;
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    await cached.promise;
   } catch (error) {
+    cached.promise = null; // Reset promise so we can retry on next request
     console.error(`MongoDB Connection Error: ${error.message}`);
     throw error;
   }
