@@ -12,6 +12,7 @@ import UploadClaim from './pages/UploadClaim';
 import ClaimAnalysis from './pages/ClaimAnalysis';
 import ClaimPackage from './pages/ClaimPackage';
 import ClaimHistory from './pages/ClaimHistory';
+import MissingDocuments from './pages/MissingDocuments';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
@@ -90,6 +91,14 @@ const AppLayout = () => {
             element={
               <ProtectedRoute>
                 <ClaimHistory />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/missing-documents" 
+            element={
+              <ProtectedRoute>
+                <MissingDocuments />
               </ProtectedRoute>
             } 
           />

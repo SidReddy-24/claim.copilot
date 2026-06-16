@@ -206,11 +206,14 @@ const Dashboard = () => {
         </div>
 
         {/* Stat 4: Missing Docs */}
-        <div className="neu-card p-5 rounded-2xl relative overflow-hidden">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Missing Documents</p>
+        <div 
+          onClick={() => navigate('/missing-documents')}
+          className="neu-card p-5 rounded-2xl relative overflow-hidden cursor-pointer hover:shadow-lg hover:scale-[1.02] transition-all duration-300 group"
+        >
+          <p className="text-[10px] font-bold text-slate-400 group-hover:text-slate-650 uppercase tracking-widest transition-colors">Missing Documents</p>
           <p className="text-2xl font-black text-rose-600 mt-2">{totalMissingDocumentsCount}</p>
           <div className="flex items-center space-x-1 mt-2 text-[10px] text-slate-500 font-bold">
-            <AlertTriangle size={10} className="text-rose-500" />
+            <AlertTriangle size={10} className="text-rose-500 group-hover:animate-bounce" />
             <span>Files flagged by AI analyzer</span>
           </div>
         </div>
