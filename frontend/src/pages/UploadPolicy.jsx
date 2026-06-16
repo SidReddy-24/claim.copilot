@@ -56,7 +56,7 @@ const UploadPolicy = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12 sm:px-6 lg:px-8 bg-[#e6eef8]">
+    <div className="max-w-3xl mx-auto px-4 py-12 sm:px-6 lg:px-8 bg-[#f4f6fa]">
       {/* Back to Dashboard */}
       <button
         onClick={() => navigate('/dashboard')}
@@ -100,7 +100,7 @@ const UploadPolicy = () => {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="border-2 border-dashed border-slate-300 hover:border-blue-400 rounded-2xl p-10 text-center cursor-pointer transition-all duration-300 bg-[#e6eef8] neu-inset relative group">
+            <div className="border-2 border-dashed border-slate-300 hover:border-blue-400 rounded-2xl p-10 text-center cursor-pointer transition-all duration-300 bg-[#f4f6fa] neu-inset relative group">
               <input
                 type="file"
                 id="policyFile"
@@ -109,7 +109,7 @@ const UploadPolicy = () => {
                 onChange={handleFileChange}
               />
               <div className="space-y-3">
-                <div className="mx-auto w-12 h-12 rounded-2xl bg-[#e6eef8] neu-card flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-all duration-300">
+                <div className="mx-auto w-12 h-12 rounded-2xl bg-[#f4f6fa] neu-card flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-all duration-300">
                   <Upload size={20} />
                 </div>
                 <div>
@@ -124,7 +124,7 @@ const UploadPolicy = () => {
             </div>
 
             {file && (
-              <div className="bg-[#e6eef8] neu-card p-4 rounded-2xl flex items-center justify-between">
+              <div className="bg-[#f4f6fa] neu-card p-4 rounded-2xl flex items-center justify-between">
                 <div className="flex items-center space-x-3 min-w-0">
                   <FileText size={20} className="text-blue-500 shrink-0" />
                   <div className="min-w-0">

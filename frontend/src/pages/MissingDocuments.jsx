@@ -48,7 +48,7 @@ const MissingDocuments = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center space-y-4 min-h-[50vh] bg-[#e6eef8]">
+      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center space-y-4 min-h-[50vh] bg-[#f4f6fa]">
         <div className="w-8 h-8 border-2 border-slate-200 border-t-blue-500 rounded-full animate-spin"></div>
         <span className="text-xs text-slate-500 font-bold">Scanning policies for missing documents...</span>
       </div>
@@ -56,7 +56,7 @@ const MissingDocuments = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#e6eef8]">
+    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#f4f6fa]">
       {/* Header Row */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <button
@@ -93,7 +93,7 @@ const MissingDocuments = () => {
             {totalMissingCount} Documents Flagged
           </p>
         </div>
-        <div className="text-xs text-slate-500 font-bold bg-[#e6eef8] neu-inset px-4 py-2 rounded-xl">
+        <div className="text-xs text-slate-500 font-bold bg-[#f4f6fa] neu-inset px-4 py-2 rounded-xl">
           Across {policyGroups.length} Active Policies
         </div>
       </div>

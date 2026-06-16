@@ -121,7 +121,7 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-6 bg-[#e6eef8]">
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-6 bg-[#f4f6fa]">
         <div className="h-10 w-48 bg-[#dbe4f2] animate-pulse rounded-xl"></div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {[1, 2, 3, 4].map(n => (
@@ -137,7 +137,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#e6eef8]">
+    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#f4f6fa]">
       {/* Welcome Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -230,7 +230,7 @@ const Dashboard = () => {
                 <ShieldCheck className="text-[#4a6f98]" size={16} />
                 <span>Your Health Policies</span>
               </h2>
-              <span className="text-[10px] text-slate-500 font-bold bg-[#e6eef8] neu-inset px-2.5 py-1 rounded-md">
+              <span className="text-[10px] text-slate-500 font-bold bg-[#f4f6fa] neu-inset px-2.5 py-1 rounded-md">
                 {policies.length} Registered
               </span>
             </div>
@@ -262,7 +262,7 @@ const Dashboard = () => {
                         <span>No: {policy.policyNumber}</span>
                       </p>
                       <div className="flex gap-2 mt-2">
-                        <span className="text-[9px] font-bold bg-[#e6eef8] text-[#4a6f98] px-2.5 py-0.5 rounded border border-blue-200/20">
+                        <span className="text-[9px] font-bold bg-[#f4f6fa] text-[#4a6f98] px-2.5 py-0.5 rounded border border-blue-200/20">
                           Sum Insured: ₹{(policy.sumInsured || 0).toLocaleString('en-IN')}
                         </span>
                       </div>
@@ -398,7 +398,7 @@ const Dashboard = () => {
       {/* Policy Benefits Details Modal Popup */}
       {selectedPolicyForBenefits && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-[#e6eef8] neu-flat max-w-5xl w-full max-h-[85vh] rounded-3xl p-6 overflow-y-auto space-y-6 relative border border-slate-200/50">
+          <div className="bg-[#f4f6fa] neu-flat max-w-5xl w-full max-h-[85vh] rounded-3xl p-6 overflow-y-auto space-y-6 relative border border-slate-200/50">
             {/* Modal Header */}
             <div className="flex justify-between items-start border-b border-slate-200/60 pb-4">
               <div>
@@ -410,7 +410,7 @@ const Dashboard = () => {
               </div>
               <button
                 onClick={() => setSelectedPolicyForBenefits(null)}
-                className="w-8 h-8 rounded-full bg-[#e6eef8] neu-card flex items-center justify-center text-slate-500 hover:text-slate-800 transition-all duration-200 shadow-md"
+                className="w-8 h-8 rounded-full bg-[#f4f6fa] neu-card flex items-center justify-center text-slate-500 hover:text-slate-800 transition-all duration-200 shadow-md"
               >
                 <X size={16} />
               </button>
@@ -491,7 +491,7 @@ const Dashboard = () => {
                   </h3>
                   <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
                     {((selectedPolicyForBenefits.benefits || fallbackBenefits).waiting_periods || []).map((item, idx) => (
-                      <div key={idx} className="bg-[#e6eef8] p-3.5 rounded-xl border border-slate-200/35 space-y-1.5 shadow-sm">
+                      <div key={idx} className="bg-[#f4f6fa] p-3.5 rounded-xl border border-slate-200/35 space-y-1.5 shadow-sm">
                         <div className="flex justify-between items-center">
                           <span className="text-[11px] font-bold text-slate-800">{item.title}</span>
                           <span className="text-[8px] font-black bg-amber-100 text-amber-750 px-1.5 py-0.5 rounded">
@@ -514,7 +514,7 @@ const Dashboard = () => {
                   </h3>
                   <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
                     {((selectedPolicyForBenefits.benefits || fallbackBenefits).covered_benefits || []).map((item, idx) => (
-                      <div key={idx} className="bg-[#e6eef8] p-3.5 rounded-xl border border-slate-200/35 space-y-1.5 shadow-sm">
+                      <div key={idx} className="bg-[#f4f6fa] p-3.5 rounded-xl border border-slate-200/35 space-y-1.5 shadow-sm">
                         <div className="flex justify-between items-center">
                           <span className="text-[11px] font-bold text-slate-800">{item.title}</span>
                           <span className="text-[8px] font-black bg-emerald-100 text-emerald-750 px-1.5 py-0.5 rounded">
@@ -537,7 +537,7 @@ const Dashboard = () => {
                   </h3>
                   <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
                     {((selectedPolicyForBenefits.benefits || fallbackBenefits).exclusions || []).map((item, idx) => (
-                      <div key={idx} className="bg-[#e6eef8] p-3.5 rounded-xl border border-slate-200/35 space-y-1.5 border-l-2 border-rose-400 shadow-sm">
+                      <div key={idx} className="bg-[#f4f6fa] p-3.5 rounded-xl border border-slate-200/35 space-y-1.5 border-l-2 border-rose-400 shadow-sm">
                         <div className="flex justify-between items-center">
                           <span className="text-[11px] font-bold text-slate-800">{item.title}</span>
                           <span className="text-[8px] font-black bg-rose-100 text-rose-750 px-1.5 py-0.5 rounded">

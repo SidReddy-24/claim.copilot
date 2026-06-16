@@ -35,14 +35,14 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[#e6eef8]">
+    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[#f4f6fa]">
       <div className="max-w-md w-full space-y-8 neu-flat p-8 rounded-3xl relative overflow-hidden">
         {/* Glow Element */}
         <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-400/5 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-400/5 rounded-full blur-3xl"></div>
 
         <div className="text-center relative z-10">
-          <div className="mx-auto w-12 h-12 rounded-2xl bg-[#9BBEED] flex items-center justify-center text-white font-extrabold text-2xl shadow-lg shadow-blue-500/5 mb-4">
+          <div className="mx-auto w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white font-extrabold text-2xl shadow-lg shadow-blue-500/10 mb-4">
             C
           </div>
           <h2 className="text-3xl font-extrabold text-slate-800 tracking-tight">Create Account</h2>
@@ -73,7 +73,7 @@ const Signup = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-[#e6eef8] neu-input rounded-2xl text-slate-800 placeholder-slate-400 text-sm"
+                  className="block w-full pl-11 pr-4 py-3 bg-[#f4f6fa] neu-input rounded-2xl text-slate-800 placeholder-slate-400 text-sm"
                   placeholder="Rahul Sharma"
                 />
               </div>
@@ -92,7 +92,7 @@ const Signup = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-[#e6eef8] neu-input rounded-2xl text-slate-800 placeholder-slate-400 text-sm"
+                  className="block w-full pl-11 pr-4 py-3 bg-[#f4f6fa] neu-input rounded-2xl text-slate-800 placeholder-slate-400 text-sm"
                   placeholder="name@example.com"
                 />
               </div>
@@ -111,7 +111,7 @@ const Signup = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-[#e6eef8] neu-input rounded-2xl text-slate-800 placeholder-slate-400 text-sm"
+                  className="block w-full pl-11 pr-4 py-3 bg-[#f4f6fa] neu-input rounded-2xl text-slate-800 placeholder-slate-400 text-sm"
                   placeholder="••••••••"
                 />
               </div>
@@ -139,13 +139,11 @@ const Signup = () => {
         <div className="text-center relative z-10 pt-2">
           <p className="text-xs text-slate-500 font-semibold">
             Already have an account?{' '}
-            <Link to="/login" className="font-bold text-[#5c81ae] hover:text-[#7ba0ce] hover:underline transition">
+            <Link to="/login" className="font-bold text-blue-600 hover:text-blue-700 hover:underline transition">
               Sign in
             </Link>
           </p>
         </div>
-
-
       </div>
     </div>
   );

@@ -78,7 +78,7 @@ const ClaimPackage = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center space-y-4 min-h-[50vh] bg-[#e6eef8]">
+      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center space-y-4 min-h-[50vh] bg-[#f4f6fa]">
         <div className="w-10 h-10 border-2 border-slate-200 border-t-blue-500 rounded-full animate-spin"></div>
         <span className="text-xs text-slate-500 font-bold">Compiling submission package parameters...</span>
       </div>
@@ -87,7 +87,7 @@ const ClaimPackage = () => {
 
   if (error || !claim) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-12 text-center space-y-4 bg-[#e6eef8]">
+      <div className="max-w-3xl mx-auto px-4 py-12 text-center space-y-4 bg-[#f4f6fa]">
         <AlertCircle size={40} className="mx-auto text-rose-500" />
         <h3 className="text-base font-extrabold text-slate-800">Package Unavailable</h3>
         <p className="text-xs text-slate-500 font-bold">{error || 'Reimbursement package data could not be parsed.'}</p>
@@ -102,7 +102,7 @@ const ClaimPackage = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#e6eef8]">
+    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#f4f6fa]">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <button
@@ -113,7 +113,7 @@ const ClaimPackage = () => {
           <span>Back to Claim Analysis</span>
         </button>
 
-        <span className="text-xs text-slate-650 bg-[#e6eef8] neu-inset px-3 py-1.5 rounded-xl font-extrabold">
+        <span className="text-xs text-slate-650 bg-[#f4f6fa] neu-inset px-3 py-1.5 rounded-xl font-extrabold">
           Claim Value: ₹{claim.totalClaimedAmount.toLocaleString('en-IN')}
         </span>
       </div>
@@ -213,7 +213,7 @@ const ClaimPackage = () => {
               </button>
             </div>
 
-            <div className="bg-[#e6eef8] neu-inset rounded-2xl p-4 font-mono text-[11px] text-slate-700 whitespace-pre-wrap leading-relaxed max-h-[400px] overflow-y-auto border border-white/20">
+            <div className="bg-[#f4f6fa] neu-inset rounded-2xl p-4 font-mono text-[11px] text-slate-700 whitespace-pre-wrap leading-relaxed max-h-[400px] overflow-y-auto border border-white/20">
               {claim.emailDraft || 'Email draft generation pending.'}
             </div>
           </div>
@@ -232,7 +232,7 @@ const ClaimPackage = () => {
       </div>
 
       {/* Action Footer */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#e6eef8] neu-flat p-6 rounded-3xl">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#f4f6fa] neu-flat p-6 rounded-3xl">
         <div className="space-y-0.5 text-center sm:text-left">
           <h4 className="font-extrabold text-sm text-slate-800">Reimbursement Package Ready?</h4>
           <p className="text-xs text-slate-550 font-bold">

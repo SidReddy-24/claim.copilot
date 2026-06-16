@@ -162,7 +162,7 @@ const ClaimAnalysis = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center space-y-4 min-h-[50vh] bg-[#e6eef8]">
+      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center space-y-4 min-h-[50vh] bg-[#f4f6fa]">
         <Loader2 className="animate-spin text-blue-500" size={32} />
         <span className="text-xs text-slate-500 font-bold">Loading AI Claim Audit results...</span>
       </div>
@@ -171,7 +171,7 @@ const ClaimAnalysis = () => {
 
   if (error || !claim) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-12 text-center space-y-4 bg-[#e6eef8]">
+      <div className="max-w-3xl mx-auto px-4 py-12 text-center space-y-4 bg-[#f4f6fa]">
         <AlertCircle size={40} className="mx-auto text-rose-500" />
         <h3 className="text-base font-extrabold text-slate-800">Analysis Data Unavailable</h3>
         <p className="text-xs text-slate-500 font-bold">{error || 'Claim data could not be parsed.'}</p>
@@ -188,7 +188,7 @@ const ClaimAnalysis = () => {
   const potentialDeductions = claim.totalClaimedAmount - claim.estimatedReimbursement;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#e6eef8]">
+    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#f4f6fa]">
       {/* Navigation */}
       <button
         onClick={() => navigate('/dashboard')}
@@ -222,7 +222,7 @@ const ClaimAnalysis = () => {
 
           <div className="flex flex-col items-end text-right">
             <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Claims Status</span>
-            <span className="text-[10px] font-bold bg-[#e6eef8] text-blue-700 border border-blue-200/50 px-2.5 py-1 rounded-full mt-1.5 neu-card">
+            <span className="text-[10px] font-bold bg-[#f4f6fa] text-blue-700 border border-blue-200/50 px-2.5 py-1 rounded-full mt-1.5 neu-card">
               Copilot Audited
             </span>
           </div>
@@ -259,7 +259,7 @@ const ClaimAnalysis = () => {
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Copilot Confidence Score</p>
           <div className="flex items-center space-x-3 mt-2">
             <p className="text-3xl font-black text-slate-800">{claim.confidenceScore}%</p>
-            <div className="flex-1 bg-[#e6eef8] h-2 rounded-full overflow-hidden neu-inset">
+            <div className="flex-1 bg-[#f4f6fa] h-2 rounded-full overflow-hidden neu-inset">
               <div 
                 className="bg-blue-600 h-full rounded-full transition-all duration-1000"
                 style={{ width: `${claim.confidenceScore}%` }}
@@ -333,7 +333,7 @@ const ClaimAnalysis = () => {
                   <tr key={idx} className="hover:bg-slate-100/40 transition-colors">
                     <td className="py-4 px-4 font-bold text-slate-800">{item.description}</td>
                     <td className="py-4 px-4">
-                      <span className="bg-[#e6eef8] text-slate-600 px-2 py-0.5 rounded border border-slate-200/50">
+                      <span className="bg-[#f4f6fa] text-slate-600 px-2 py-0.5 rounded border border-slate-200/50">
                         {item.category}
                       </span>
                     </td>
@@ -426,7 +426,7 @@ const ClaimAnalysis = () => {
               </h3>
               <div className="space-y-3">
                 {((claim.policyBenefits || fallbackBenefits).waiting_periods || []).map((item, idx) => (
-                  <div key={idx} className="bg-[#e6eef8] neu-card p-4 rounded-xl space-y-2">
+                  <div key={idx} className="bg-[#f4f6fa] neu-card p-4 rounded-xl space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-bold text-slate-800">{item.title}</span>
                       <span className="text-[8px] font-black bg-amber-100 text-amber-700 px-2 py-0.5 rounded">
@@ -449,7 +449,7 @@ const ClaimAnalysis = () => {
               </h3>
               <div className="space-y-3">
                 {((claim.policyBenefits || fallbackBenefits).covered_benefits || []).map((item, idx) => (
-                  <div key={idx} className="bg-[#e6eef8] neu-card p-4 rounded-xl space-y-2">
+                  <div key={idx} className="bg-[#f4f6fa] neu-card p-4 rounded-xl space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-bold text-slate-800">{item.title}</span>
                       <span className="text-[8px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">
@@ -472,7 +472,7 @@ const ClaimAnalysis = () => {
               </h3>
               <div className="space-y-3">
                 {((claim.policyBenefits || fallbackBenefits).exclusions || []).map((item, idx) => (
-                  <div key={idx} className="bg-[#e6eef8] neu-card p-4 rounded-xl space-y-2 border-l-2 border-rose-400">
+                  <div key={idx} className="bg-[#f4f6fa] neu-card p-4 rounded-xl space-y-2 border-l-2 border-rose-400">
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-bold text-slate-800">{item.title}</span>
                       <span className="text-[8px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded">
@@ -501,7 +501,7 @@ const ClaimAnalysis = () => {
       </div>
 
       {/* Action Block */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#e6eef8] neu-flat p-6 rounded-3xl">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#f4f6fa] neu-flat p-6 rounded-3xl">
         <div className="space-y-0.5 text-center sm:text-left">
           <h4 className="font-extrabold text-sm text-slate-850">
             {claim.status === 'Submitted' ? 'Submission Package Ready' : 'Generate Submission Package'}

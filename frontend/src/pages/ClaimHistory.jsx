@@ -48,7 +48,7 @@ const ClaimHistory = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center space-y-4 min-h-[50vh] bg-[#e6eef8]">
+      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center space-y-4 min-h-[50vh] bg-[#f4f6fa]">
         <div className="w-8 h-8 border-2 border-slate-200 border-t-blue-500 rounded-full animate-spin"></div>
         <span className="text-xs text-slate-500 font-bold">Loading claims historical audits...</span>
       </div>
@@ -56,7 +56,7 @@ const ClaimHistory = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#e6eef8]">
+    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#f4f6fa]">
       {/* Header Row */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <button
@@ -86,7 +86,7 @@ const ClaimHistory = () => {
       )}
 
       {/* Filter Row */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-[#e6eef8] neu-flat p-4 rounded-2xl">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-[#f4f6fa] neu-flat p-4 rounded-2xl">
         {/* Search */}
         <div className="relative w-full md:w-80">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -97,7 +97,7 @@ const ClaimHistory = () => {
             placeholder="Search by Hospital Name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="block w-full pl-9 pr-4 py-2.5 bg-[#e6eef8] neu-input rounded-xl text-slate-800 placeholder-slate-400 text-xs font-semibold"
+            className="block w-full pl-9 pr-4 py-2.5 bg-[#f4f6fa] neu-input rounded-xl text-slate-800 placeholder-slate-400 text-xs font-semibold"
           />
         </div>
 

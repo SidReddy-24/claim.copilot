@@ -20,7 +20,7 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#e6eef8]">
+      <div className="min-h-screen flex items-center justify-center bg-[#f4f6fa]">
         <div className="w-10 h-10 border-2 border-slate-200 border-t-blue-500 rounded-full animate-spin"></div>
       </div>
     );
@@ -36,7 +36,7 @@ const ProtectedRoute = ({ children }) => {
 // Global Layout wrapper to conditionally show navigation
 const AppLayout = () => {
   return (
-    <div className="min-h-screen bg-[#e6eef8] text-slate-800 flex flex-col">
+    <div className="min-h-screen bg-[#f4f6fa] text-slate-800 flex flex-col">
       <Navbar />
       <main className="flex-grow">
 

@@ -120,7 +120,7 @@ const UploadClaim = () => {
 
   if (loadingPolicy) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center space-y-4 min-h-[50vh] bg-[#e6eef8]">
+      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center space-y-4 min-h-[50vh] bg-[#f4f6fa]">
         <Loader2 className="animate-spin text-blue-500" size={32} />
         <span className="text-xs text-slate-500 font-bold">Loading claim metadata and files...</span>
       </div>
@@ -128,7 +128,7 @@ const UploadClaim = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#e6eef8]">
+    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8 bg-[#f4f6fa]">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <button
@@ -140,7 +140,7 @@ const UploadClaim = () => {
         </button>
 
         {policy && (
-          <div className="flex items-center space-x-2 text-[10px] text-slate-500 font-bold bg-[#e6eef8] neu-inset px-3 py-1.5 rounded-xl">
+          <div className="flex items-center space-x-2 text-[10px] text-slate-500 font-bold bg-[#f4f6fa] neu-inset px-3 py-1.5 rounded-xl">
             <ShieldCheck size={12} className="text-emerald-500" />
             <span className="font-bold">Active Policy:</span>
             <span className="text-slate-700">{policy.policyName} ({policy.policyNumber})</span>
@@ -187,7 +187,7 @@ const UploadClaim = () => {
                   <select
                     value={fileType}
                     onChange={(e) => setFileType(e.target.value)}
-                    className="block w-full px-4 py-3 bg-[#e6eef8] neu-input rounded-2xl text-slate-800 text-xs"
+                    className="block w-full px-4 py-3 bg-[#f4f6fa] neu-input rounded-2xl text-slate-800 text-xs"
                   >
                     {fileTypeOptions.map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -195,7 +195,7 @@ const UploadClaim = () => {
                   </select>
                 </div>
 
-                <div className="border-2 border-dashed border-slate-350 hover:border-blue-400 rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 bg-[#e6eef8] neu-inset relative group">
+                <div className="border-2 border-dashed border-slate-350 hover:border-blue-400 rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 bg-[#f4f6fa] neu-inset relative group">
                   <input
                     type="file"
                     required
@@ -203,7 +203,7 @@ const UploadClaim = () => {
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                   <div className="space-y-2">
-                    <div className="mx-auto w-10 h-10 rounded-2xl bg-[#e6eef8] neu-card flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-all duration-300">
+                    <div className="mx-auto w-10 h-10 rounded-2xl bg-[#f4f6fa] neu-card flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-all duration-300">
                       <Upload size={18} />
                     </div>
                     <div>
@@ -250,7 +250,7 @@ const UploadClaim = () => {
                   <div key={idx} className="py-2.5 flex justify-between items-center text-xs">
                     <div>
                       <p className="font-bold text-slate-700">{item.description}</p>
-                      <span className="text-[9px] font-bold bg-[#e6eef8] text-slate-500 px-2 py-0.5 rounded border border-slate-200/60 mt-1.5 inline-block">
+                      <span className="text-[9px] font-bold bg-[#f4f6fa] text-slate-500 px-2 py-0.5 rounded border border-slate-200/60 mt-1.5 inline-block">
                         {item.category}
                       </span>
                     </div>
@@ -283,7 +283,7 @@ const UploadClaim = () => {
                       <FileText size={16} className="text-blue-500 shrink-0" />
                       <div className="min-w-0">
                         <p className="text-xs font-bold text-slate-700 truncate">{doc.fileName}</p>
-                        <p className="text-[8px] font-black bg-[#e6eef8] text-slate-500 px-1.5 py-0.5 rounded border border-slate-200/60 w-fit mt-1.5 uppercase">
+                        <p className="text-[8px] font-black bg-[#f4f6fa] text-slate-500 px-1.5 py-0.5 rounded border border-slate-200/60 w-fit mt-1.5 uppercase">
                           {doc.fileType}
                         </p>
                       </div>
